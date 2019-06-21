@@ -70,7 +70,7 @@ class ScannerVC: UIViewController {
                 frontCamera = device
             }
         }
-        currentCamera = frontCamera
+        currentCamera = backCamera
     }
 
     func setupInputAndOutput() {
