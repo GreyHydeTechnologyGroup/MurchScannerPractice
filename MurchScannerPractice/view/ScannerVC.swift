@@ -19,9 +19,11 @@ class ScannerVC: UIViewController {
     var backCamera: AVCaptureDevice?
     var frontCamera: AVCaptureDevice?
     var currentCamera: AVCaptureDevice?
-    var photoOutput: AVCapturePhotoOutput?
+    //var photoOutput: AVCapturePhotoOutput?
+    var videoOutput: AVCaptureVideoDataOutput?
     var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
-    var image: UIImage?
+   // var image: UIImage?
+    var video: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,9 +79,9 @@ class ScannerVC: UIViewController {
         do {
             let captureDeviceInput = try AVCaptureDeviceInput(device: currentCamera!)
             captureSession.addInput(captureDeviceInput)
-            photoOutput = AVCapturePhotoOutput()
-            photoOutput?.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.jpeg])], completionHandler: nil)
-            captureSession.addOutput(photoOutput!)
+            videoOutput = AVCaptureVideoDataOutput()
+            videoOutput?.setSampleBufferDelegate(.none, queue: nil) //setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey : AVVideoCodecType.jpeg])], completionHandler: nil)
+            captureSession.addOutput(videoOutput!)
         } catch {
             print(error)
         }
@@ -105,7 +107,7 @@ class ScannerVC: UIViewController {
     @objc func camButtonAction() {
         print("called ScannerVC.camButtonAction() ")
         let settings = AVCapturePhotoSettings()
-        photoOutput?.capturePhoto(with: settings, delegate: self)
+        //videoOutput?.capturePhoto(with: settings, delegate: self)
     }
 }
 
@@ -113,9 +115,9 @@ extension ScannerVC: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let imageData = photo.fileDataRepresentation() {
             let temp = UIImage(data: imageData)
-            self.image = UIImage(cgImage: temp!.cgImage!, scale: temp!.scale, orientation: .leftMirrored)
+            //self.image = UIImage(cgImage: temp!.cgImage!, scale: temp!.scale, orientation: .leftMirrored)
             let vc = ShowPhotoVC()
-            vc.photo = self.image
+            //vc.photo = self.image
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
